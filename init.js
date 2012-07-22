@@ -4,8 +4,8 @@ $(function(){
   var model = new Cluster({
     stars : [
       { name : 'Sol',       position : {x:0,y:0} },
-      { name : 'Rigil',     position : {x:3,y:2} },
-      { name : 'Sirius',    position : {x:-3,y:3} }
+      { name : 'Rigil',     position : {x:140,y:90} },
+      { name : 'Sirius',    position : {x:-90,y:120} }
     ],
     planets : {
       'Sol' : [
@@ -31,5 +31,9 @@ $(function(){
   });
   
   var view = new ClusterView(model);
+
+  view.render();
+
+  //$(document.body).append();
 
 });

@@ -44,14 +44,21 @@ var Cluster = function(config){
     }
   }
 
+  // add routes between stars to map
   for(i = 0, l = config.routes.length; i < l; ++i){
     r = config.routes[i];
     map.addEdge(starLookup[r[0]],starLookup[r[1]]);
   }
 
-  // add routes to map
-  console.log(map.getNodes());
+  CL.getStars = function(){
+    return stars;
+  };
 
+  CL.getMap = function(){
+    return map;
+  };
+
+  // run all entity AI
   CL.turn = function(){
 
   };
