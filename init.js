@@ -4,11 +4,13 @@ $(function(){
   var model = new Cluster({
     stars : [
       { name : 'Sol',       position : {x:0,y:0} },
-      { name : 'Rigil',     position : {x:140,y:90} },
-      { name : 'Sirius',    position : {x:-90,y:120} }
+      { name : 'Rigil',     position : {x:100,y:90} },
+      { name : 'Sirius',    position : {x:-90,y:120} },
+      { name : 'Luyten',    position : {x:90,y:-160} }
     ],
     planets : {
       'Sol' : [
+        { name : 'Mercury', foodSupply : 0 },
         { name : 'Venus',   foodSupply : -2 },
         { name : 'Earth',   foodSupply :  4 },
         { name : 'Mars',    foodSupply : -1 }
@@ -26,6 +28,8 @@ $(function(){
     },
     routes : [
       ['Sol','Rigil'],
+      ['Sol','Luyten'],
+      ['Sol','Sirius'],
       ['Rigil','Sirius']
     ]
   });
@@ -34,6 +38,13 @@ $(function(){
 
   view.render();
 
-  //$(document.body).append();
+  model.turn();
+
+  view.updateUi();
+
+  model.turn();
+
+  view.updateUi();
+  
 
 });

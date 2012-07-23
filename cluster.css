@@ -1,5 +1,5 @@
 html,body {
-  background: #111;
+  background: #050505;
   color: #ccc;
   position: absolute;
   width: 100%;
@@ -11,8 +11,6 @@ svg {
   position: absolute !important;
   left: 50% !important;
   top: 50% !important;
-  margin-left: -300px;
-  margin-top: -240px;
-  border: 1px #555 solid;
-  
+  margin-left: -1000px;
+  margin-top: -1000px;
 }
