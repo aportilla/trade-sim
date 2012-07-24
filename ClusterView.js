@@ -26,9 +26,10 @@ var ClusterView = function(cluster,CV){
     // planets
     for(i = 0, l = star.planets.length; i < l; ++i){
 
-      var j,k,m,
+      p = cluster.getPlanet(star.planets[i]);
+
+      var j,k,
         o = i * 130,
-        p = cluster.getPlanet(star.planets[i]),
         orbitRadius = scale * (6 + 4 * (i+1)),
         pOrb = paper.circle(posX,posY,orbitRadius),
         pCirc = paper.circle(posX,posY,(scale * 2));
@@ -65,7 +66,7 @@ var ClusterView = function(cluster,CV){
     };
 
     var hoverIn = function(){
-      boundaryCircle.attr("fill-opacity",.07);
+      boundaryCircle.attr("fill-opacity",0.07);
       boundaryCircle.attr("r",(scale * 40));
     };
 
@@ -96,9 +97,9 @@ var ClusterView = function(cluster,CV){
 
   CV.ShipView = function(ship,SV){
     SV = {};
-    var circle = paper.circle(posX,posY,(scale * 2));
-    circle.attr("fill", "green");
-    circle.attr("stroke", "white");
+    // var circle = paper.circle(posX,posY,(scale * 2));
+    // circle.attr("fill", "green");
+    // circle.attr("stroke", "white");
     return SV;
   };
 
@@ -131,7 +132,7 @@ var ClusterView = function(cluster,CV){
 
     for (var sId in ships){
       if (!shipViews[sId]){
-        shipViews[sId] = new 
+        //shipViews[sId] = new ShipView(ships[sId]);
       }
     }
 

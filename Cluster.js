@@ -60,8 +60,6 @@ var Cluster = function(config){
     // ship is docked
     if (ship.planet){
 
-      console.log(ship.id + ' : i am a ship on a planet');
-
       var planet = planets[ship.planet];
 
       switch (ship.cargo){
@@ -71,12 +69,12 @@ var Cluster = function(config){
           if (planet.foodDemand > 0){
             planet.food += ship.capacity;
             planet.foodDemand -= ship.capacity;
-            console.log(ship.id + ' : i am delivering food to this planet');
+            console.log('ship ' + ship.id + ' : i am delivering food to planet ' + ship.planet);
             delete ships[ship.id];
           // leave this planet
           } else {
 
-            console.log(ship.id + ' : i am leaving this planet with food');
+            console.log('ship ' + ship.id + ' : i am leaving planet ' + ship.planet + ' with food');
             ship.planet = '';
           }
           break;
@@ -85,7 +83,7 @@ var Cluster = function(config){
     // ship is enroute to a star
     } else if (ship.route){
 
-      console.log(ship.id + ' : i have arrived at the star : ' + ship.star);
+      console.log('ship ' + ship.id + ' : i have arrived at the star : ' + ship.star);
 
       // arrive at the star system...
       ship.route = '';
@@ -93,7 +91,7 @@ var Cluster = function(config){
     // ship is in a star system
     } else {
 
-      console.log(ship.id + ' : i am a ship in at a star : ' + ship.star);
+      console.log('ship ' + ship.id + ' : i am at star ' + ship.star);
       // if a planet in star system has demand for cargo
         // land on planet
       // else
