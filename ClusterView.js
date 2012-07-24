@@ -11,7 +11,9 @@ var ClusterView = function(cluster,CV){
 
   var routeViews = [];
 
-  var scale = 1;
+  var shipViews = {};
+
+  var scale = 2;
 
   CV.StarView = function(star,SV){
 
@@ -19,7 +21,6 @@ var ClusterView = function(cluster,CV){
 
     var posX = (scale * star.position.x) + centerOffsetX;
     var posY = (scale * star.position.y) + centerOffsetY;
-    var radius = (scale * 5);
     var i,l,p;
 
     // planets
@@ -28,9 +29,9 @@ var ClusterView = function(cluster,CV){
       var j,k,m,
         o = i * 130,
         p = cluster.getPlanet(star.planets[i]),
-        orbitRadius = (6 + ((i+1) * 4)),
+        orbitRadius = scale * (6 + 4 * (i+1)),
         pOrb = paper.circle(posX,posY,orbitRadius),
-        pCirc = paper.circle(posX,posY,2);
+        pCirc = paper.circle(posX,posY,(scale * 2));
 
       for(j=0,k=p.name.length;j < k; ++j){
         o += p.name.charCodeAt(j);
@@ -42,7 +43,7 @@ var ClusterView = function(cluster,CV){
       pCirc.transform("r" + (o % 360) + "t" + orbitRadius + ",0");
     }
 
-    var circle = paper.circle(posX,posY,radius);
+    var circle = paper.circle(posX,posY,(scale * 3));
     // circle.attr("fill", "#27357d");
     // circle.attr("stroke", "#66d9ef");
     circle.attr("fill", "yellow");
@@ -52,7 +53,7 @@ var ClusterView = function(cluster,CV){
     text.attr("fill","#66d9ef");
     text.attr("font","10px Monaco");
 
-    var boundaryCircle = paper.circle(posX,posY,radius * 4);
+    var boundaryCircle = paper.circle(posX,posY,(scale * 20));
     boundaryCircle.attr("fill", "#0099ff");
     boundaryCircle.attr("stroke", "#fff");
     boundaryCircle.attr("fill-opacity", 0);
@@ -65,12 +66,12 @@ var ClusterView = function(cluster,CV){
 
     var hoverIn = function(){
       boundaryCircle.attr("fill-opacity",.07);
-      boundaryCircle.attr("r",radius*8);
+      boundaryCircle.attr("r",(scale * 40));
     };
 
     var hoverOut = function(){
       boundaryCircle.attr("fill-opacity",0);
-      boundaryCircle.attr("r",radius*4);
+      boundaryCircle.attr("r",(scale * 20));
     };
 
     boundaryCircle.click(handleClick);
@@ -91,6 +92,14 @@ var ClusterView = function(cluster,CV){
     var path = paper.path("M" + aX + " " + aY + "L" + bX + " " + bY);
     path.attr("stroke", "#234");
     return RV;
+  };
+
+  CV.ShipView = function(ship,SV){
+    SV = {};
+    var circle = paper.circle(posX,posY,(scale * 2));
+    circle.attr("fill", "green");
+    circle.attr("stroke", "white");
+    return SV;
   };
 
 
@@ -117,6 +126,14 @@ var ClusterView = function(cluster,CV){
   };
 
   CV.updateUi = function(){
+
+    var ships = cluster.getShips();
+
+    for (var sId in ships){
+      if (!shipViews[sId]){
+        shipViews[sId] = new 
+      }
+    }
 
   };
 

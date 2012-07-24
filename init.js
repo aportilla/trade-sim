@@ -3,27 +3,27 @@ $(function(){
 
   var model = new Cluster({
     stars : [
-      { name : 'Sol',       position : {x:0,y:0} },
-      { name : 'Rigil',     position : {x:100,y:90} },
-      { name : 'Sirius',    position : {x:-90,y:120} },
-      { name : 'Luyten',    position : {x:90,y:-160} }
+      { name : 'Sol',       position : {x:   0, y:   0} },
+      { name : 'Rigil',     position : {x: 100, y:  90} },
+      { name : 'Sirius',    position : {x: -90, y: 120} },
+      { name : 'Luyten',    position : {x:  90, y:-160} }
     ],
     planets : {
       'Sol' : [
-        { name : 'Mercury', foodSupply : 0 },
-        { name : 'Venus',   foodSupply : -2 },
-        { name : 'Earth',   foodSupply :  4 },
-        { name : 'Mars',    foodSupply : -1 }
+        { name : 'Mercury', population :  1 },
+        { name : 'Venus',   population :  3, foodProduction :  1 },
+        { name : 'Earth',   population : 12, foodProduction : 16 },
+        { name : 'Mars',    population :  3, foodProduction :  2 }
       ],
       'Rigil' : [
-        { name : 'Agathon', foodSupply :  1 },
-        { name : 'Cercops', foodSupply : -3 }
+        { name : 'Agathon', population :  1 },
+        { name : 'Cercops', population :  3 }
       ],
       'Sirius' : [
-        { name : 'Garuda',  foodSupply :  1 },
-        { name : 'Parvati', foodSupply :  0 },
-        { name : 'Sesha',   foodSupply : -3 },
-        { name : 'Manasa',  foodSupply : -3 }
+        { name : 'Garuda',  population :  1 },
+        { name : 'Parvati', population :  0 },
+        { name : 'Sesha',   population :  3, foodProduction : 5 },
+        { name : 'Manasa',  population :  3 }
       ]
     },
     routes : [
@@ -42,9 +42,9 @@ $(function(){
 
   view.updateUi();
 
-  model.turn();
+  // model.turn();
 
-  view.updateUi();
+  // view.updateUi();
   
 
 });

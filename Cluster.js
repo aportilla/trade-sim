@@ -60,19 +60,24 @@ var Cluster = function(config){
     // ship is docked
     if (ship.planet){
 
+      console.log(ship.id + ' : i am a ship on a planet');
+
       var planet = planets[ship.planet];
 
       switch (ship.cargo){
         case 'food':
 
           // does this planet need food?
-          if (planet.population - planet.food > 0){
-            planet.food = planet.foodDemand - ship.capacity;
+          if (planet.foodDemand > 0){
+            planet.food += ship.capacity;
+            planet.foodDemand -= ship.capacity;
+            console.log(ship.id + ' : i am delivering food to this planet');
             delete ships[ship.id];
           // leave this planet
           } else {
-            ship.planet = '';
 
+            console.log(ship.id + ' : i am leaving this planet with food');
+            ship.planet = '';
           }
           break;
       }
@@ -80,11 +85,15 @@ var Cluster = function(config){
     // ship is enroute to a star
     } else if (ship.route){
 
+      console.log(ship.id + ' : i have arrived at the star : ' + ship.star);
+
+      // arrive at the star system...
       ship.route = '';
 
     // ship is in a star system
     } else {
 
+      console.log(ship.id + ' : i am a ship in at a star : ' + ship.star);
       // if a planet in star system has demand for cargo
         // land on planet
       // else
@@ -97,16 +106,18 @@ var Cluster = function(config){
 
   var planetAi = function(planet){
 
-    var i,l,s;
+    var i,s;
 
     // set the planets food import need
     planet.foodDemand = planet.population - planet.foodProduction;
 
-    // add production to food supply
+    // add produced food to current food supply
     planet.food += planet.foodProduction;
 
     // consume the planets avail food
-    planet.food = planet.population > planet.food ? 0 : planet.food - planet.population;
+    planet.food = Math.max(0,planet.food - planet.population);
+
+    console.log(planet);
 
     // all leftover food gets exported on ships
     for(i = 0; i < planet.food; ++i){
@@ -118,6 +129,7 @@ var Cluster = function(config){
       ships[s.id] = s;
     }
 
+    // no food remains at end of planet turn
     planet.food = 0;
 
   };
@@ -134,6 +146,10 @@ var Cluster = function(config){
     return stars;
   };
 
+  CL.getShips = function(){
+    return ships;
+  };
+
   CL.getMap = function(){
     return map;
   };
@@ -141,14 +157,17 @@ var Cluster = function(config){
   // run all entity AI
   CL.turn = function(){
 
-    // run ship AI
-    for (var i in ships){
-      shipAi(ships[i]);
-    }
+    console.log('* * * * TURN * * * * *');
 
     // run planet AI
     for (var i in planets){
       planetAi(planets[i]);
+    }
+
+    // run ship AI
+    for (var i in ships){
+      console.log(ships[i]);
+      shipAi(ships[i]);
     }
 
   };
