@@ -1,5 +1,9 @@
 /*  
 
+  pub/sub method for standalone objects without any jQuery dependency by Adam Portilla
+
+  Just a slightly modified version of:
+
   jQuery pub/sub plugin by Peter Higgins (dante@dojotoolkit.org)
 
   Loosely based on Dojo publish/subscribe API, limited in scope. Rewritten blindly.
@@ -9,7 +13,7 @@
 
 */  
 
-;(function(d){
+function pubsub(d){
 
   // the topic/subscription hash
   var cache = {};
@@ -28,9 +32,11 @@
     //    with a function signature like: function(a,b,c){ ... }
     //
     //  |   $.publish("/some/topic", ["a","b","c"]);
-    d.each(cache[topic], function(){
-      this.apply(d, args || []);
-    });
+    var ct = cache[topic];
+    for (var i = 0, l = ct.length; i < l; i++){
+      ct[i].apply(d, args || []);
+    }
+
   };
 
   d.subscribe = function(/* String */topic, /* Function */callback){
@@ -66,11 +72,14 @@
     //  | $.unsubscribe(handle);
     
     var t = handle[0];
-    cache[t] && d.each(cache[t], function(idx){
-      if(this == handle[1]){
-        cache[t].splice(idx, 1);
+    var ct = cache[t];
+    if (!ct) return;
+    for (var i = 0, l = ct.length; i < l; i++){
+      if(ct[i] == handle[1]){
+        ct.splice(i, 1);
       }
-    });
+    }
+
   };
 
-})(jQuery);
+}
