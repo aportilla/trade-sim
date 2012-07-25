@@ -11,8 +11,8 @@ $(function(){
     planets : {
       'Sol' : [
         { name : 'Mercury', population :  1 },
-        { name : 'Venus',   population :  3, foodProduction :  1 },
-        { name : 'Earth',   population : 12, foodProduction : 16 },
+        { name : 'Venus',   population :  3, foodProduction : 0 },
+        { name : 'Earth',   population : 12, foodProduction : 26 },
         { name : 'Mars',    population :  3, foodProduction :  2 }
       ],
       'Rigil' : [

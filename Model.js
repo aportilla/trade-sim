@@ -6,6 +6,7 @@ function Model(defaults){
   return function(p){
     p = p || {};
     var that = util.clone(defaults);
+    // provide each model with an isolated pub/sub event registry
     pubsub(that);
     that.id = util.makeId();
     for (var key in defaults) {

@@ -97,9 +97,45 @@ var ClusterView = function(cluster,CV){
 
   CV.ShipView = function(ship,SV){
     SV = {};
-    // var circle = paper.circle(posX,posY,(scale * 2));
-    // circle.attr("fill", "green");
-    // circle.attr("stroke", "white");
+
+    var circle = paper.circle(0,0,scale);
+    circle.attr("fill", "green");
+    circle.attr("stroke-width", 0);
+    
+    SV.updateUi = function(){
+
+      var newX = 0;
+      var newY = 0;
+
+      // ship is at a planet
+      if (ship.planet){
+        var planet = planets[ship.planet];
+        console.log('place on planet : ' + ship.planet);
+      // ship is enroute to a star
+      } else if (ship.route){
+        console.log('place in route : ' + ship.route);
+      // ship is in a star system
+      } else {
+        var star = cluster.getStar(ship.star);
+        // var randYOffset = (Math.round(Math.random()) ? 1 : -1) * (Math.floor((Math.random()*30)) + (Math.abs(randXOffset) < 10 ? 10 : 0));
+        // var randXOffset = (Math.round(Math.random()) ? 1 : -1) * Math.floor((Math.random()*40));
+
+        var randR = (Math.floor(Math.random()*25) + 6);
+        var randTheta = Math.random() * 2 * Math.PI;
+        var randXOffset = randR * Math.cos(randTheta);
+        var randYOffset = randR * Math.sin(randTheta);
+
+        var newX = (scale * star.position.x) + centerOffsetX + (scale * randXOffset);
+        var newY = (scale * star.position.y) + centerOffsetY + (scale * randYOffset);
+      }
+
+      circle.attr({
+        cx : newX,
+        cy : newY
+      });
+
+    };
+
     return SV;
   };
 
@@ -132,8 +168,10 @@ var ClusterView = function(cluster,CV){
 
     for (var sId in ships){
       if (!shipViews[sId]){
-        //shipViews[sId] = new ShipView(ships[sId]);
+        shipViews[sId] = new CV.ShipView(ships[sId]);
       }
+
+      shipViews[sId].updateUi();
     }
 
   };
