@@ -17,8 +17,10 @@ var Graph = function(){
     return nodes;
   };
 
-  GR.getEdges = function(){
-    return edges;
+  GR.getEdges = function(nId){
+    if (!nId ){ return edges; }
+    if (!nodes[nId]){ return; }
+    return nodes[nId].edges;
   };
 
   GR.addEdge = function(nA,nB){

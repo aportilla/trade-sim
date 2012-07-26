@@ -113,7 +113,14 @@ var ClusterView = function(cluster,CV){
         console.log('place on planet : ' + ship.planet);
       // ship is enroute to a star
       } else if (ship.route){
+        
         console.log('place in route : ' + ship.route);
+        // get the edge
+        // get nodeA
+        // get nodeB
+        // calculate some position between nodeA and nodeB
+        // move the ship there...
+        
       // ship is in a star system
       } else {
         var star = cluster.getStar(ship.star);

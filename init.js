@@ -42,9 +42,9 @@ $(function(){
 
   view.updateUi();
 
-  // model.turn();
+  model.turn();
 
-  // view.updateUi();
+  view.updateUi();
 
 
 });

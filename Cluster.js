@@ -92,6 +92,16 @@ var Cluster = function(config){
     } else {
 
       console.log('ship ' + ship.id + ' : i am at star ' + ship.star);
+      
+      // temp, select a random route and travel...
+      var starsEdges = map.getEdges(ship.star);
+      var edgeCount = starsEdges.length;
+      var randEdgeIndex = Math.floor(Math.random()*edgeCount);
+      var randEdge = starsEdges[randEdgeIndex];
+      var destStar = randEdge.nodeA == ship.star ? randEdge.nodeB : randEdge.nodeA;
+      ship.route = randEdge.id;
+      ship.star = destStar;
+      
       // if a planet in star system has demand for cargo
         // land on planet
       // else
