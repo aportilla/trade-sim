@@ -132,8 +132,8 @@ var ClusterView = function(cluster,CV){
         var randXOffset = randR * Math.cos(randTheta);
         var randYOffset = randR * Math.sin(randTheta);
 
-        var newX = (scale * star.position.x) + centerOffsetX + (scale * randXOffset);
-        var newY = (scale * star.position.y) + centerOffsetY + (scale * randYOffset);
+        newX = (scale * star.position.x) + centerOffsetX + (scale * randXOffset);
+        newY = (scale * star.position.y) + centerOffsetY + (scale * randYOffset);
       }
 
       circle.attr({
