@@ -173,9 +173,9 @@ var Cluster = function(config){
     }
 
     // run ship AI
-    for (var i in ships){
-      console.log(ships[i]);
-      shipAi(ships[i]);
+    for (var j in ships){
+      console.log(ships[j]);
+      shipAi(ships[j]);
     }
 
   };
