@@ -15,6 +15,8 @@ var Cluster = function(config){
     Planet = new Model({
       name : '',
       star : '',
+      order : 0,
+      randInt : 0,
       population : 0,
       foodProduction : 0,
       food : 0
@@ -31,7 +33,7 @@ var Cluster = function(config){
     planets = {},
     ships = {},
     planetLookup = {},
-    i,l,j,k,s,p,r;
+    i,l,j,k,m,n,o,s,p,r;
 
   // create stars and planets
   for(i = 0, l = config.stars.length; i < l; ++i){
@@ -41,6 +43,8 @@ var Cluster = function(config){
     if (config.planets[s.name]){
       for (j = 0, k = config.planets[s.name].length; j < k; ++j){
         p = new Planet(config.planets[s.name][j]);
+        p.rand = Math.floor(((53 + j) * p.name.charCodeAt(0))%100) / 100;
+        p.order = j;
         p.star = s.id;
         planets[p.id] = p;
         planetLookup[p.name] = p.id;
@@ -69,12 +73,12 @@ var Cluster = function(config){
           if (planet.foodDemand > 0){
             planet.food += ship.capacity;
             planet.foodDemand -= ship.capacity;
-            console.log('ship ' + ship.id + ' : i am delivering food to planet ' + ship.planet);
+            // console.log('ship ' + ship.id + ' : i am delivering food to planet ' + ship.planet);
             delete ships[ship.id];
           // leave this planet
           } else {
 
-            console.log('ship ' + ship.id + ' : i am leaving planet ' + ship.planet + ' with food');
+            // console.log('ship ' + ship.id + ' : i am leaving planet ' + ship.planet + ' with food');
             ship.planet = '';
           }
           break;
@@ -83,7 +87,7 @@ var Cluster = function(config){
     // ship is enroute to a star
     } else if (ship.route){
 
-      console.log('ship ' + ship.id + ' : i have arrived at the star : ' + ship.star);
+      // console.log('ship ' + ship.id + ' : i have arrived at the star : ' + ship.star);
 
       // arrive at the star system...
       ship.route = '';
@@ -91,7 +95,7 @@ var Cluster = function(config){
     // ship is in a star system
     } else {
 
-      console.log('ship ' + ship.id + ' : i am at star ' + ship.star);
+      // console.log('ship ' + ship.id + ' : i am at star ' + ship.star);
       
       // temp, select a random route and travel...
       var starsEdges = map.getEdges(ship.star);
@@ -125,7 +129,7 @@ var Cluster = function(config){
     // consume the planets avail food
     planet.food = Math.max(0,planet.food - planet.population);
 
-    console.log(planet);
+    // console.log(planet);
 
     // all leftover food gets exported on ships
     for(i = 0; i < planet.food; ++i){
@@ -143,6 +147,7 @@ var Cluster = function(config){
   };
 
   CL.getPlanet = function(pId){
+    // console.log(pId);
     return planets[pId];
   };
 
@@ -165,17 +170,17 @@ var Cluster = function(config){
   // run all entity AI
   CL.turn = function(){
 
-    console.log('* * * * TURN * * * * *');
-
+    // console.log('* * * * TURN * * * * *');
+    
+    // run ship AI
+    for (var j in ships){
+      // console.log(ships[j]);
+      shipAi(ships[j]);
+    }
+    
     // run planet AI
     for (var i in planets){
       planetAi(planets[i]);
-    }
-
-    // run ship AI
-    for (var j in ships){
-      console.log(ships[j]);
-      shipAi(ships[j]);
     }
 
   };

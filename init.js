@@ -35,15 +35,17 @@ $(function(){
   });
   
   var view = new ClusterView(model);
+  
+
+  var $turnButton = $('<button class="turnButton">Turn</button>').click(function(){
+    model.turn();
+    view.updateUi();
+  });
+  
+  $(document.body).append($turnButton);
 
   view.render();
-
   model.turn();
-
-  view.updateUi();
-
-  model.turn();
-
   view.updateUi();
 
 

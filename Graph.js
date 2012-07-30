@@ -4,7 +4,7 @@ var Graph = function(){
 
   var GR = {},
     nodes = {},
-    edges = [],
+    edges = {},
     Edge = new Model({
       nodeA : '',
       nodeB : ''
@@ -13,8 +13,10 @@ var Graph = function(){
       edges : []
     });
 
-  GR.getNodes = function(){
-    return nodes;
+  GR.getNodes = function(eId){
+    if (!eId ){ return nodes; }
+    if (!edges[eId]){ return; }
+    return edges[eId];
   };
 
   GR.getEdges = function(nId){
@@ -34,7 +36,7 @@ var Graph = function(){
       nodeB : nB 
     });
 
-    edges.push(newEdge);
+    edges[newEdge.id] = newEdge;
     nodes[nA].edges.push(newEdge);
     nodes[nB].edges.push(newEdge);
 

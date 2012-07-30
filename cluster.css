@@ -14,3 +14,9 @@ svg {
   margin-left: -1000px;
   margin-top: -1000px;
 }
+
+.turnButton {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
