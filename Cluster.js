@@ -172,6 +172,16 @@ var Cluster = function(config){
 
     // console.log('* * * * TURN * * * * *');
     
+    // run star AI
+    var processDemandPing = function(beginId,endId,distance){
+      console.log(arguments);
+    };
+    
+    for (var s in stars){
+      map.ping(s,processDemandPing);
+    }
+    
+    
     // run ship AI
     for (var j in ships){
       // console.log(ships[j]);

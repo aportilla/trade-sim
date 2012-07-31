@@ -13,6 +13,37 @@ var Graph = function(){
       edges : []
     });
 
+  // a breadth first traversal of the graph
+  // from a particular node
+  // triggering the callback for each node
+  // with originNode, endNode, and distance as arguments
+  GR.ping = function(nId,callback,scope){
+    
+    var Q = [],
+      qued = {},
+      distance = {},
+      u,i,l,v,e;
+      
+    Q.push(nId);
+    qued[nId] = true;
+    distance[nId] = 0;
+    
+    while (Q.length > 0) {
+        u = Q.splice(0, 1)[0];
+        callback.call(scope,nId,u,distance[u]);
+        for (i = 0,l = nodes[u].edges.length; i < l; i++) {
+            e = nodes[u].edges[i];
+            v = e.nodeA == u ? e.nodeB : e.nodeA;
+            if (!qued[v]) {
+                distance[v] = distance[u] + 1;
+                Q.push(v);
+                qued[v] = true;
+            }
+        }
+    }
+    
+  };
+
   GR.getNodes = function(eId){
     if (!eId ){ return nodes; }
     if (!edges[eId]){ return; }
