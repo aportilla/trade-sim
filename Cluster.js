@@ -33,31 +33,23 @@ var Cluster = function(config){
     planets = {},
     ships = {},
     planetLookup = {},
+    demand = {},
     i,l,j,k,m,n,o,s,p,r;
 
-  // create stars and planets
-  for(i = 0, l = config.stars.length; i < l; ++i){
-    s = new Star(config.stars[i]);
-    stars[s.id] = s;
-    starLookup[s.name] = s.id;
-    if (config.planets[s.name]){
-      for (j = 0, k = config.planets[s.name].length; j < k; ++j){
-        p = new Planet(config.planets[s.name][j]);
-        p.rand = Math.floor(((53 + j) * p.name.charCodeAt(0))%100) / 100;
-        p.order = j;
-        p.star = s.id;
-        planets[p.id] = p;
-        planetLookup[p.name] = p.id;
-        s.planets.push(p.id);
-      }
+  CL.getDemandAtStar = function(starId,resource){
+    
+    var star = stars[starId],
+      demand = 0,
+      dKey = resource + 'Demand',
+      planet,i,p;
+      
+    for (i=0,p=star.planets.length;i<p;i++){
+      demand += planets[star.planets[i]][dKey];
     }
-  }
 
-  // add routes between stars to map
-  for(i = 0, l = config.routes.length; i < l; ++i){
-    r = config.routes[i];
-    map.addEdge(starLookup[r[0]],starLookup[r[1]]);
-  }
+    return demand;
+  
+  };
 
   var shipAi = function(ship){
 
@@ -99,6 +91,9 @@ var Cluster = function(config){
       
       // temp, select a random route and travel...
       var starsEdges = map.getEdges(ship.star);
+      var edgeDemand = demand[ship.star];
+      console.log('edge');
+      console.log(edgeDemand);
       var edgeCount = starsEdges.length;
       var randEdgeIndex = Math.floor(Math.random()*edgeCount);
       var randEdge = starsEdges[randEdgeIndex];
@@ -140,7 +135,7 @@ var Cluster = function(config){
       });
       ships[s.id] = s;
     }
-
+  
     // no food remains at end of planet turn
     planet.food = 0;
 
@@ -172,15 +167,29 @@ var Cluster = function(config){
 
     // console.log('* * * * TURN * * * * *');
     
+    demand = {};
+    
     // run star AI
-    var processDemandPing = function(beginId,endId,distance){
-      console.log(arguments);
+    var processDemand = function(nodeId,edgeId,originNodeId,distance){
+      
+      if (distance === 0){ return; }
+      
+      if (!demand[nodeId]){ demand[nodeId] = {}; }
+      if (!demand[nodeId][edgeId]){ demand[nodeId][edgeId] = {}; }
+      if (!demand[nodeId][edgeId].food){ demand[nodeId][edgeId].food = 0; }
+      
+      var foodDemandAtOrigin = CL.getDemandAtStar(originNodeId,'food');
+      
+      //console.log('demand from ' + stars[originNodeId].name + ' to  ' + stars[nodeId].name + ' is: ' + (foodDemandAtOrigin / distance));
+      
+      demand[nodeId][edgeId].food += foodDemandAtOrigin / distance;
+      
     };
     
     for (var s in stars){
-      map.ping(s,processDemandPing);
-    }
-    
+      map.ping(s,processDemand);
+    } 
+    console.log(demand);
     
     // run ship AI
     for (var j in ships){
@@ -194,6 +203,41 @@ var Cluster = function(config){
     }
 
   };
+  
+  var initialize = function(){
+
+    // create stars and planets
+    for(i = 0, l = config.stars.length; i < l; ++i){
+      s = new Star(config.stars[i]);
+      stars[s.id] = s;
+      starLookup[s.name] = s.id;
+      if (config.planets[s.name]){
+        for (j = 0, k = config.planets[s.name].length; j < k; ++j){
+          p = new Planet(config.planets[s.name][j]);
+          p.rand = Math.floor(((53 + j) * p.name.charCodeAt(0))%100) / 100;
+          p.order = j;
+          p.star = s.id;
+          planets[p.id] = p;
+          planetLookup[p.name] = p.id;
+          s.planets.push(p.id);
+        }
+      }
+    }
+    
+    // add routes between stars to map
+    for(i = 0, l = config.routes.length; i < l; ++i){
+      r = config.routes[i];
+      map.addEdge(starLookup[r[0]],starLookup[r[1]]);
+    }
+
+    // run planet AI
+    for (var i in planets){
+      planetAi(planets[i]);
+    }
+    
+  };
+  
+  initialize();
   
   return CL;
 

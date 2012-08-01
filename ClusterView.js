@@ -190,7 +190,7 @@ var ClusterView = function(cluster,CV){
     SV.updateUi = function(){
 
 
-      var anim = Raphael.animation(getShipPosition(), 1000);
+      var anim = Raphael.animation(getShipPosition(), 1000,'easeInOut');
       //circle.animate(anim); // run the given animation immediately
       var delay = Math.floor(Math.random() * 2000);
       circle.animate(anim.delay(delay)); // run the given animation after 500 ms

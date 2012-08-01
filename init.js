@@ -9,10 +9,13 @@ $(function(){
       { name : 'Luyten',    position : {x:  90, y:-160} }
     ],
     planets : {
+      'Luyten' : [
+        { name : 'Enderby', population :  2 },
+      ],
       'Sol' : [
         { name : 'Mercury', population :  1 },
         { name : 'Venus',   population :  3, foodProduction : 0 },
-        { name : 'Earth',   population : 12, foodProduction : 26 },
+        { name : 'Earth',   population : 12, foodProduction : 24 },
         { name : 'Mars',    population :  3, foodProduction :  2 }
       ],
       'Rigil' : [
@@ -22,8 +25,8 @@ $(function(){
       'Sirius' : [
         { name : 'Garuda',  population :  1 },
         { name : 'Parvati', population :  0 },
-        { name : 'Sesha',   population :  3, foodProduction : 5 },
-        { name : 'Manasa',  population :  3 }
+        { name : 'Sesha',   population :  4, foodProduction : 5 },
+        { name : 'Manasa',  population :  3, foodProduction : 5 }
       ]
     },
     routes : [
@@ -36,7 +39,6 @@ $(function(){
   
   var view = new ClusterView(model);
   
-
   var $turnButton = $('<button class="turnButton">Turn</button>').click(function(){
     model.turn();
     view.updateUi();
@@ -45,7 +47,6 @@ $(function(){
   $(document.body).append($turnButton);
 
   view.render();
-  model.turn();
   view.updateUi();
 
 

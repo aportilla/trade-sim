@@ -21,21 +21,25 @@ var Graph = function(){
     
     var Q = [],
       qued = {},
+      path = {},
       distance = {},
       u,i,l,v,e;
       
     Q.push(nId);
+    path[nId] = false;
     qued[nId] = true;
     distance[nId] = 0;
     
     while (Q.length > 0) {
         u = Q.splice(0, 1)[0];
-        callback.call(scope,nId,u,distance[u]);
+        callback.call(scope,u,path[u],nId,distance[u]);
+        if (!nodes[u]){ continue; }
         for (i = 0,l = nodes[u].edges.length; i < l; i++) {
             e = nodes[u].edges[i];
             v = e.nodeA == u ? e.nodeB : e.nodeA;
             if (!qued[v]) {
                 distance[v] = distance[u] + 1;
+                path[v] = e.id;
                 Q.push(v);
                 qued[v] = true;
             }
