@@ -91,29 +91,32 @@ var Cluster = function(config){
       
       // temp, select a random route and travel...
       //var starsEdges = map.getEdges(ship.star);
-      var edgeDemand = demand[ship.star];
-      var probas = [];
-      var values = [];
-      for (var edg in edgeDemand){
-        if (edgeDemand[edg].food <= 0){ continue; }
-        probas.push(edgeDemand[edg].food);
-        values.push(edg);
-      }
-      
-      if (values.length > 0){
-        var chosenEdgeId = util.probpic(probas,values);
-        var chosenEdge = map.getEdge(chosenEdgeId);
-        var destStar = chosenEdge.nodeA == ship.star ? chosenEdge.nodeB : chosenEdge.nodeA;
-        ship.route = chosenEdge.id;
-        ship.star = destStar;
-      }
+
       
       // if a planet in star system has demand for cargo
+      
+      if (false){
         // land on planet
-      // else
+      } else {
         // select neighboring star based on cargo demand
         // enter route to neighboring star.
-
+        var edgeDemand = demand[ship.star];
+        var probas = [];
+        var values = [];
+        for (var edg in edgeDemand){
+          if (edgeDemand[edg].food <= 0){ continue; }
+          probas.push(edgeDemand[edg].food);
+          values.push(edg);
+        }
+        
+        if (values.length > 0){
+          var chosenEdgeId = util.probpic(probas,values);
+          var chosenEdge = map.getEdge(chosenEdgeId);
+          var destStar = chosenEdge.nodeA == ship.star ? chosenEdge.nodeB : chosenEdge.nodeA;
+          ship.route = chosenEdge.id;
+          ship.star = destStar;
+        }
+      }
     }
 
   };
