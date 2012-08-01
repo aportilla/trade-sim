@@ -33,7 +33,8 @@ $(function(){
       ['Sol','Rigil'],
       ['Sol','Luyten'],
       ['Sol','Sirius'],
-      ['Rigil','Sirius']
+      ['Rigil','Sirius'],
+      ['Rigil','Luyten']
     ]
   });
   

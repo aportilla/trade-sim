@@ -90,16 +90,23 @@ var Cluster = function(config){
       // console.log('ship ' + ship.id + ' : i am at star ' + ship.star);
       
       // temp, select a random route and travel...
-      var starsEdges = map.getEdges(ship.star);
+      //var starsEdges = map.getEdges(ship.star);
       var edgeDemand = demand[ship.star];
-      console.log('edge');
-      console.log(edgeDemand);
-      var edgeCount = starsEdges.length;
-      var randEdgeIndex = Math.floor(Math.random()*edgeCount);
-      var randEdge = starsEdges[randEdgeIndex];
-      var destStar = randEdge.nodeA == ship.star ? randEdge.nodeB : randEdge.nodeA;
-      ship.route = randEdge.id;
-      ship.star = destStar;
+      var probas = [];
+      var values = [];
+      for (var edg in edgeDemand){
+        if (edgeDemand[edg].food <= 0){ continue; }
+        probas.push(edgeDemand[edg].food);
+        values.push(edg);
+      }
+      
+      if (values.length > 0){
+        var chosenEdgeId = util.probpic(probas,values);
+        var chosenEdge = map.getEdge(chosenEdgeId);
+        var destStar = chosenEdge.nodeA == ship.star ? chosenEdge.nodeB : chosenEdge.nodeA;
+        ship.route = chosenEdge.id;
+        ship.star = destStar;
+      }
       
       // if a planet in star system has demand for cargo
         // land on planet
@@ -189,7 +196,7 @@ var Cluster = function(config){
     for (var s in stars){
       map.ping(s,processDemand);
     } 
-    console.log(demand);
+    // console.log(demand);
     
     // run ship AI
     for (var j in ships){

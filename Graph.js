@@ -48,8 +48,7 @@ var Graph = function(){
     
   };
 
-  GR.getNodes = function(eId){
-    if (!eId ){ return nodes; }
+  GR.getEdge = function(eId){
     if (!edges[eId]){ return; }
     return edges[eId];
   };

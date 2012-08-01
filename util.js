@@ -5,6 +5,41 @@ var util = function(UT){
 
   UT = UT || {};
 
+  UT.probpic = function(probas,options){
+    var ar = [],
+      count = probas.length,
+      probsum = 0,
+      sum = 0,
+      i;
+
+    for (i=0; i<count; i++)
+    {
+      probsum += probas[i];
+    }
+  
+    for (i=0; i<count-1 ; i++) // notice the '-1'
+    {
+      sum += (probas[i] / probsum);
+      ar[i] = sum;
+    }
+  
+    // random num between 0 and 1
+    var r = Math.random(); 
+    
+    // increment through the probability spread until 
+    // r is greater than the prob value
+    for (i=0 ; i<ar.length && r>=ar[i] ; i++);
+  
+    return options[i];
+  };
+  
+  UT.test = function(){
+    
+    UT.probpic([3,3,12],['a','b','c']);
+  };
+
+
+
   UT.makeId = function() {
     var incr = 0;
     return function(){

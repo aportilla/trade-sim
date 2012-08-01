@@ -38,7 +38,7 @@ var ClusterView = function(cluster,CV){
   
   // get a random position along a given route...
   var getRoutePosition = function(routeId){
-    var route = map.getNodes(routeId);
+    var route = map.getEdge(routeId);
     var starA = cluster.getStar(route.nodeA);
     var starB = cluster.getStar(route.nodeB);
     var posA = starA.position;
@@ -146,7 +146,7 @@ var ClusterView = function(cluster,CV){
         // console.log('ship is at a planet!');
         // console.log('place on planet : ' + ship.planet);
         var pPos = getPlanetPosition(ship.planet);
-        newX = (scale * pPos.x) + centerOffsetX,
+        newX = (scale * pPos.x) + centerOffsetX;
         newY = (scale * pPos.y) + centerOffsetY;
 
       // ship is enroute to a star
