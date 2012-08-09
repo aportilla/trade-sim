@@ -197,11 +197,11 @@ var ClusterView = function(cluster,CV){
 
       // ship is at a planet
       if (ship.planet){
-        circle.hide();
+        //circle.hide();
       // ship is enroute to a star
       } else if (ship.route){
         
-        circle.show();
+        //circle.show();
       // ship is in a star system
       } else {
         
@@ -210,6 +210,10 @@ var ClusterView = function(cluster,CV){
 
 
     };
+    
+    ship.subscribe('delete',function(){
+      circle.remove();
+    });
 
     return SV;
   };

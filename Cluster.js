@@ -39,16 +39,35 @@ var Cluster = function(config){
   CL.getDemandAtStar = function(starId,resource){
     
     var star = stars[starId],
-      demand = 0,
+      sDemand = 0,
       dKey = resource + 'Demand',
       planet,i,p;
       
     for (i=0,p=star.planets.length;i<p;i++){
-      demand += planets[star.planets[i]][dKey];
+      sDemand += planets[star.planets[i]][dKey];
     }
 
-    return demand;
+    return sDemand;
   
+  };
+  
+  CL.getPlanetWithDemand = function(starId,resource){
+
+    var star = stars[starId],
+      sDemand = 0,
+      dKey = resource + 'Demand',
+      planetsWithDemand = [],plnt,pdem,i,p;
+    
+    for (i=0,p=star.planets.length;i<p;i++){
+      plnt = planets[star.planets[i]];
+      pdem = plnt[dKey];
+      if (pdem > 0){
+        planetsWithDemand.push(plnt);
+      }
+    }
+    
+    return planetsWithDemand[Math.floor(Math.random()*planetsWithDemand.length)];
+    
   };
 
   var shipAi = function(ship){
@@ -66,11 +85,12 @@ var Cluster = function(config){
             planet.food += ship.capacity;
             planet.foodDemand -= ship.capacity;
             // console.log('ship ' + ship.id + ' : i am delivering food to planet ' + ship.planet);
+            ship.publish('delete');
             delete ships[ship.id];
           // leave this planet
           } else {
 
-            // console.log('ship ' + ship.id + ' : i am leaving planet ' + ship.planet + ' with food');
+            console.log('ship ' + ship.id + ' : i am leaving planet ' + ship.planet + ' with food');
             ship.planet = '';
           }
           break;
@@ -79,7 +99,7 @@ var Cluster = function(config){
     // ship is enroute to a star
     } else if (ship.route){
 
-      // console.log('ship ' + ship.id + ' : i have arrived at the star : ' + ship.star);
+      console.log('ship ' + ship.id + ' : i have arrived at the star : ' + ship.star);
 
       // arrive at the star system...
       ship.route = '';
@@ -87,7 +107,7 @@ var Cluster = function(config){
     // ship is in a star system
     } else {
 
-      // console.log('ship ' + ship.id + ' : i am at star ' + ship.star);
+      console.log('ship ' + ship.id + ' : i am at star ' + ship.star);
       
       // temp, select a random route and travel...
       //var starsEdges = map.getEdges(ship.star);
@@ -95,8 +115,16 @@ var Cluster = function(config){
       
       // if a planet in star system has demand for cargo
       
-      if (false){
+      var planetWithDemand = CL.getPlanetWithDemand(ship.star,'food');
+
+      if (planetWithDemand){
+        console.log('LAND ON PLANET with demand : ' + planetWithDemand.foodDemand);
+        console.log(planetWithDemand);
         // land on planet
+        ship.planet = planetWithDemand.id;
+        planetWithDemand.foodDemand--;
+        
+        
       } else {
         // select neighboring star based on cargo demand
         // enter route to neighboring star.
