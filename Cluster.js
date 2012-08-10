@@ -22,6 +22,7 @@ var Cluster = function(config){
       food : 0
     }),
     Ship = new Model({
+      age : 0,
       cargo : '',
       capacity : 1,
       planet : '',
@@ -74,6 +75,8 @@ var Cluster = function(config){
     
     // console.log('>>> run ship ai');
 
+    ship.age++;
+
     // ship is docked
     if (ship.planet){
       
@@ -117,7 +120,11 @@ var Cluster = function(config){
         planetWithDemand.foodDemand -= ship.capacity;
         ship.cargo = 'none';
         
+      } else if (ship.age > 6) {
+        ship.publish('delete');
+        delete ships[ship.id];
       } else {
+        
         // select neighboring star based on cargo demand
         // enter route to neighboring star.
         var edgeDemand = demand[ship.star];
@@ -226,10 +233,13 @@ var Cluster = function(config){
     // console.log(demand);
     
     // run ship AI
+    var shipCount = 0;
     for (var j in ships){
       // console.log(ships[j]);
+      shipCount++;
       shipAi(ships[j]);
     }
+    console.log('number of ships : ' + shipCount);
     
     // run planet AI
     for (var i in planets){

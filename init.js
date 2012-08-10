@@ -20,10 +20,10 @@ $(function(){
       ],
       'Rigil' : [
         { name : 'Agathon', population :  1 },
-        { name : 'Cercops', population :  3 }
+        { name : 'Cercops', population :  6 }
       ],
       'Sirius' : [
-        { name : 'Garuda',  population :  1 },
+        { name : 'Garuda',  population :  5 },
         { name : 'Parvati', population :  0 },
         { name : 'Sesha',   population :  4, foodProduction : 5 },
         { name : 'Manasa',  population :  3, foodProduction : 5 }
