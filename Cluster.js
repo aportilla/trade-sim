@@ -71,35 +71,26 @@ var Cluster = function(config){
   };
 
   var shipAi = function(ship){
+    
+    // console.log('>>> run ship ai');
 
     // ship is docked
     if (ship.planet){
-
-      var planet = planets[ship.planet];
-
+      
       switch (ship.cargo){
+        case 'none':
+          ship.publish('delete');
+          delete ships[ship.id];
+          break;
         case 'food':
-
-          // does this planet need food?
-          if (planet.foodDemand > 0){
-            planet.food += ship.capacity;
-            planet.foodDemand -= ship.capacity;
-            // console.log('ship ' + ship.id + ' : i am delivering food to planet ' + ship.planet);
-            ship.publish('delete');
-            delete ships[ship.id];
-          // leave this planet
-          } else {
-
-            console.log('ship ' + ship.id + ' : i am leaving planet ' + ship.planet + ' with food');
-            ship.planet = '';
-          }
+          ship.planet = '';
           break;
       }
 
     // ship is enroute to a star
     } else if (ship.route){
 
-      console.log('ship ' + ship.id + ' : i have arrived at the star : ' + ship.star);
+      // console.log('ship ' + ship.id + ' : i have arrived at the star : ' + ship.star);
 
       // arrive at the star system...
       ship.route = '';
@@ -107,7 +98,7 @@ var Cluster = function(config){
     // ship is in a star system
     } else {
 
-      console.log('ship ' + ship.id + ' : i am at star ' + ship.star);
+      // console.log('ship ' + ship.id + ' : i am at star ' + ship.star);
       
       // temp, select a random route and travel...
       //var starsEdges = map.getEdges(ship.star);
@@ -118,12 +109,13 @@ var Cluster = function(config){
       var planetWithDemand = CL.getPlanetWithDemand(ship.star,'food');
 
       if (planetWithDemand){
-        console.log('LAND ON PLANET with demand : ' + planetWithDemand.foodDemand);
-        console.log(planetWithDemand);
+        // console.log('LAND ON PLANET with demand : ' + planetWithDemand.foodDemand);
+        // console.log(planetWithDemand);
         // land on planet
         ship.planet = planetWithDemand.id;
-        planetWithDemand.foodDemand--;
-        
+        planetWithDemand.food += ship.capacity;
+        planetWithDemand.foodDemand -= ship.capacity;
+        ship.cargo = 'none';
         
       } else {
         // select neighboring star based on cargo demand
@@ -151,10 +143,14 @@ var Cluster = function(config){
 
   var planetAi = function(planet){
 
+    // console.log('process planet ai for : ' + planet.name);
+
     var i,s;
 
     // set the planets food import need
     planet.foodDemand = planet.population - planet.foodProduction;
+
+    // console.log('food demand is : ' + planet.foodDemand);
 
     // add produced food to current food supply
     planet.food += planet.foodProduction;
