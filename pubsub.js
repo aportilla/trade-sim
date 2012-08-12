@@ -33,6 +33,7 @@ function pubsub(d){
     //
     //  |   $.publish("/some/topic", ["a","b","c"]);
     var ct = cache[topic];
+    if (!ct){ return; }
     for (var i = 0, l = ct.length; i < l; i++){
       ct[i].apply(d, args || []);
     }

@@ -16,6 +16,7 @@ var Cluster = function(config){
       name : '',
       star : '',
       order : 0,
+      size : 1,
       randInt : 0,
       population : 0,
       foodProduction : 0,
@@ -171,7 +172,7 @@ var Cluster = function(config){
     for(i = 0; i < planet.food; ++i){
       s = new Ship({
         cargo : 'food',
-        planet : planet.id,
+        planet : '',
         star : planet.star
       });
       ships[s.id] = s;
@@ -239,7 +240,7 @@ var Cluster = function(config){
       shipCount++;
       shipAi(ships[j]);
     }
-    console.log('number of ships : ' + shipCount);
+    // console.log('number of ships : ' + shipCount);
     
     // run planet AI
     for (var i in planets){
@@ -275,8 +276,8 @@ var Cluster = function(config){
     }
 
     // run planet AI
-    for (var i in planets){
-      planetAi(planets[i]);
+    for (var pId in planets){
+      planetAi(planets[pId]);
     }
     
   };

@@ -10,23 +10,25 @@ $(function(){
     ],
     planets : {
       'Luyten' : [
-        { name : 'Enderby', population :  2 },
+        { name : 'Enderby', size : 5, population :  2 },
       ],
       'Sol' : [
-        { name : 'Mercury', population :  1 },
-        { name : 'Venus',   population :  3, foodProduction : 0 },
-        { name : 'Earth',   population : 12, foodProduction : 24 },
-        { name : 'Mars',    population :  3, foodProduction :  2 }
+        { name : 'Ceres',   size : 1, population :  1 },
+        { name : 'Vesta',   size : 1, population :  1 },
+        { name : 'Mercury', size : 2, population :  1 },
+        { name : 'Venus',   size : 3, population :  3, foodProduction : 0 },
+        { name : 'Earth',   size : 3, population : 12, foodProduction : 24 },
+        { name : 'Mars',    size : 2, population :  3, foodProduction :  2 }
       ],
       'Rigil' : [
-        { name : 'Agathon', population :  1 },
-        { name : 'Cercops', population :  6 }
+        { name : 'Agathon', size : 5, population :  1 },
+        { name : 'Cercops', size : 7, population :  6 }
       ],
       'Sirius' : [
-        { name : 'Garuda',  population :  5 },
-        { name : 'Parvati', population :  0 },
-        { name : 'Sesha',   population :  4, foodProduction : 5 },
-        { name : 'Manasa',  population :  3, foodProduction : 5 }
+        { name : 'Garuda',   size : 3, population :  5 },
+        { name : 'Parvati',  size : 2, population :  0 },
+        { name : 'Sesha',    size : 1, population :  4, foodProduction : 5 },
+        { name : 'Manasa',   size : 4, population :  3, foodProduction : 5 }
       ]
     },
     routes : [

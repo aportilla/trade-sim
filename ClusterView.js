@@ -21,17 +21,15 @@ var ClusterView = function(cluster,CV){
     
     var planet = cluster.getPlanet(planetId);
     var star = cluster.getStar(planet.star);
-    var orbitalRadius = 6 + 4 * ( planet.order + 1 );
-    var randTheta = planet.rand * 2 * Math.PI;
-    var xPosition = orbitalRadius * Math.cos(randTheta);
-    var yPosition = orbitalRadius * Math.sin(randTheta);
-    
-    // console.log(planet.name + ' is at ' + xPosition + ':' + yPosition);
+    var orbitalRadius = scale * 4;
+    var theta =  2 * Math.PI * ((planet.order + 1) / 6) - Math.PI;
+    var xPosition = orbitalRadius * Math.cos(theta);
+    var yPosition = orbitalRadius * Math.sin(theta);
     
     return {
       x : star.position.x + xPosition,
       y : star.position.y + yPosition,
-      r : orbitalRadius
+      size : planet.size
     };
     
   };
@@ -71,13 +69,9 @@ var ClusterView = function(cluster,CV){
 
       var pPosX = (scale * pPos.x) + centerOffsetX,
         pPosY = (scale * pPos.y) + centerOffsetY,
-        pOrb = paper.circle(posX,posY,scale * pPos.r),
-        pCirc = paper.circle(pPosX,pPosY,(scale * 2));
-
-      pOrb.attr("stroke","#123");
-      pCirc.attr("fill", "#234");
-      pCirc.attr("stroke-width", 0);
-    
+        pCirc = paper.circle(pPosX,pPosY,(scale * (1.5 + 2 * (pPos.size / 10))));
+        pCirc.attr("fill", "#234");
+        pCirc.attr("stroke-width", 0);
     }
 
     var circle = paper.circle(posX,posY,(scale * 3));
@@ -126,97 +120,44 @@ var ClusterView = function(cluster,CV){
     var aY = (scale * starA.position.y) + centerOffsetY;
     var bX = (scale * starB.position.x) + centerOffsetX;
     var bY = (scale * starB.position.y) + centerOffsetY;
+    
+    var abX = Math.abs(aX - bX);
+    var abY = Math.abs(aY - bY);
+    var distance = Math.round(Math.sqrt(abX * abX + abY * abY) * 100);
     var path = paper.path("M" + aX + " " + aY + "L" + bX + " " + bY);
     path.attr("stroke", "#234");
     // path.attr("stroke", "#fff");
+    
+    RV.ship = function(starA,callback){
+      
+      var circle = paper.circle(aX,aY,scale / 2);
+      circle.attr("fill", "green");
+      circle.attr("stroke-width", 0);
+      
+      var randomXOff = scale * Math.floor(Math.random() * 5);
+      var randomYOff = scale * Math.floor(Math.random() * 5);
+      
+      var randomSpeedVariance = Math.random() * 10000 - 5000;
+      
+      console.log(distance);
+      console.log(randomSpeedVariance);
+      
+      var begin = function(){
+        circle.attr({ cx : aX + randomXOff, cy : aY + randomYOff });
+        circle.animate(anim);
+      };
+      
+      var anim = Raphael.animation({ cx : bX + randomXOff, cy : bY + randomYOff }, (distance - randomSpeedVariance),'linear',begin);
+      
+      begin();
+      
+    };
+    
     return RV;
   };
 
-  CV.ShipView = function(ship,SV){
-    
-    SV = {};
-
-    var getShipPosition = function(){
-      
-      var newX = 0;
-      var newY = 0;
-      
-      // ship is at a planet
-      if (ship.planet){
-        // console.log('ship is at a planet!');
-        // console.log('place on planet : ' + ship.planet);
-        var pPos = getPlanetPosition(ship.planet);
-        newX = (scale * pPos.x) + centerOffsetX;
-        newY = (scale * pPos.y) + centerOffsetY;
-
-      // ship is enroute to a star
-      } else if (ship.route){
-// console.log('ship is at a route!');
-        
-        // console.log('place in route : ' + ship.route);
-        var routePos = getRoutePosition(ship.route);
-        newX = scale * routePos.x + centerOffsetX;
-        newY = scale * routePos.y + centerOffsetY;
-        
-      // ship is in a star system
-      } else {
-// console.log('ship is at a star!');
-        var star = cluster.getStar(ship.star);
-        // var randYOffset = (Math.round(Math.random()) ? 1 : -1) * (Math.floor((Math.random()*30)) + (Math.abs(randXOffset) < 10 ? 10 : 0));
-        // var randXOffset = (Math.round(Math.random()) ? 1 : -1) * Math.floor((Math.random()*40));
-      
-        var randR = (Math.floor(Math.random()*25) + 6);
-        var randTheta = Math.random() * 2 * Math.PI;
-        var randXOffset = randR * Math.cos(randTheta);
-        var randYOffset = randR * Math.sin(randTheta);
-      
-        newX = (scale * star.position.x) + centerOffsetX + (scale * randXOffset);
-        newY = (scale * star.position.y) + centerOffsetY + (scale * randYOffset);
-      }
-      
-      return {
-        cx : newX,
-        cy : newY
-      };
-    };
 
 
-    // console.log('create ship view');
-    var initPos = getShipPosition();
-    var circle = paper.circle(initPos.cx,initPos.cy,scale);
-    circle.attr("fill", "green");
-    circle.attr("stroke-width", 0);
-    
-    SV.updateUi = function(){
-
-
-      var anim = Raphael.animation(getShipPosition(), 1000,'easeInOut');
-      //circle.animate(anim); // run the given animation immediately
-      var delay = Math.floor(Math.random() * 2000);
-      circle.animate(anim.delay(delay)); // run the given animation after 500 ms
-
-      // ship is at a planet
-      if (ship.planet){
-        //circle.hide();
-      // ship is enroute to a star
-      } else if (ship.route){
-        
-        //circle.show();
-      // ship is in a star system
-      } else {
-        
-        circle.show();
-      }
-
-
-    };
-    
-    ship.subscribe('delete',function(){
-      circle.remove();
-    });
-
-    return SV;
-  };
 
 
   CV.render = function(){
@@ -245,13 +186,20 @@ var ClusterView = function(cluster,CV){
 
     var ships = cluster.getShips();
 
-    for (var sId in ships){
-      if (!shipViews[sId]){
-        shipViews[sId] = new CV.ShipView(ships[sId]);
-      }
-
-      shipViews[sId].updateUi();
+    // for (var sId in ships){
+    //   if (!shipViews[sId]){
+    //     shipViews[sId] = new CV.ShipView(ships[sId]);
+    //   }
+    // 
+    //   shipViews[sId].updateUi();
+    // }
+    
+    for (var i=0; i<routeViews.length;i++){
+      console.log(i);
+      routeViews[i].ship();
     }
+    
+    
 
   };
 
